@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Calculator">
+	<property environment="env"/>
+	<path id="test.classpath">
+	    <pathelement path="${env.JUNIT}" />
+		<pathelement path="${env.HAMCREST_CORE}" />
+		<pathelement path="${build-bin}"/>
+		<pathelement path="${build-test}"/>
+	</path>
+	<property name="main-src" location="src/edu/umb/cs/cs410/hw01"/>
+	<property name="build-bin" location="bin/edu/umb/cs/cs410/hw01"/>
+	<property name="main-test" location="test/src/edu/umb/cs/cs410/hw01"/>
+	<property name="build-test" location="test/bin/edu/umb/cs/cs410/hw01"/>
+	
+	<target name="init">
+		<mkdir dir="${build-bin}"/>
+	</target>
+	
+	<target name="test-init">
+		<mkdir dir="${build-test}"/>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac includeantruntime="false" srcdir="${main-src}" destdir="${build-bin}"/>
+	</target>
+	
+	<target name="run" depends="compile">
+		<java classname="edu/umb/cs/cs410/hw01/Calculator"
+			classpath="build-bin"
+			fork="true"/>
+	</target>
+	
+	<target name="test-compile" depends="test-init">
+		<javac srcdir="${main-test}" destdir="${build-test}" includeantruntime="false">
+			<classpath refid="test.classpath"/>
+		</javac>
+	</target>
+	
+    <target name="test" depends="test-compile">
+    	<junit printsummary="on" haltonfailure="yes" fork="true">
+    		<classpath refid="test.classpath"/>
+    		<formatter type="brief" usefile="false" />
+    		<batchtest>
+    			<fileset dir="${main-test}" includes="**/*Test.java" />
+    		</batchtest>
+    	</junit>
+    </target>
+</project>
